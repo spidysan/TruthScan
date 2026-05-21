@@ -4,13 +4,9 @@
  */
 
 const API_url = "";
-fetch(`${API_URL}/predict`, {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-})
+fetch("/predict")
+fetch("/train")
+fetch("/live-news")
 
 // ─── DOM References ───────────────────────────────────────────
 const newsInput      = document.getElementById("newsInput");
