@@ -3,7 +3,7 @@
  * Connects to FastAPI backend for train/predict/stats and Live News.
  */
 
-const API = "http://127.0.0.1:8000";
+const API = "";
 
 // ─── DOM References ───────────────────────────────────────────
 const newsInput      = document.getElementById("newsInput");
