@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TruthScan — Fake News Detector</title>
+  <meta name="description" content="AI-powered fake news detection system." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon"></div>
+      <span class="logo-text">TRUTHSCAN</span>
+    </div>
+    <nav class="header-nav">
+      <div class="badge-model">
+        <div class="status-dot" id="statusDot" title="Backend Status"></div>
+        SVM + TF-IDF
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-pretitle">MISINFORMATION DETECTION SYSTEM</div>
+    <h1 class="hero-title">
+      Detect <span class="hero-italic">fake news</span><br />
+      in seconds.
+    </h1>
+    <p class="hero-subtitle">
+      Powered by Support Vector Machine & TF-IDF vectorisation. Paste any news<br />
+      article below and let the model decide.
+    </p>
+    <div class="hero-pills">
+      <span class="pill">LINEARSVC</span>
+      <span class="pill">TF-IDF BIGRAMS</span>
+      <span class="pill">NLP PREPROCESSING</span>
+      <span class="pill">HIGH ACCURACY</span>
+    </div>
+  </section>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-grid">
+
+    <!-- LEFT: Analyzer -->
+    <section class="card analyzer-card" id="analyzerCard">
+      <div class="card-header">
+        <h2 class="card-title">NEWS ANALYZER</h2>
+        <button class="btn btn-ghost" id="clearBtn">CLEAR</button>
+      </div>
+
+      <div class="textarea-wrapper">
+        <textarea
+          id="newsInput"
+          class="news-textarea"
+          placeholder="Paste your news article or headline here…
+
+Example: 'Scientists at Harvard University have published a new study showing that regular exercise significantly reduces the risk of heart disease, according to a peer-reviewed paper in the New England Journal of Medicine.'"
+          spellcheck="false"
+        ></textarea>
+        <div class="char-count"><span id="charCount">0</span> characters</div>
+      </div>
+
+      <div class="analyzer-actions">
+        <button class="btn btn-primary" id="analyzeBtn" disabled>
+          <span class="btn-text">Analyze Article</span>
+        </button>
+        <button class="btn btn-secondary" id="exampleBtn">
+          Try example
+        </button>
+      </div>
+
+      <!-- Result Card -->
+      <div class="result-card hidden" id="resultCard">
+        <div class="result-verdict" id="resultVerdict">
+          <div class="verdict-badge" id="verdictBadge">—</div>
+          <div class="verdict-label" id="verdictLabel">Analyzing…</div>
+        </div>
+
+        <div class="confidence-section">
+          <div class="confidence-label">
+            <span>Confidence</span>
+            <span id="confidenceValue" class="confidence-number">0%</span>
+          </div>
+          <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" id="confidenceFill"></div>
+          </div>
+        </div>
+
+        <div class="prob-row">
+          <div class="prob-card prob-fake">
+            <span class="prob-label">Fake</span>
+            <span class="prob-value" id="probFake">0%</span>
+          </div>
+          <div class="prob-card prob-real">
+            <span class="prob-label">Real</span>
+            <span class="prob-value" id="probReal">0%</span>
+          </div>
+          <div class="prob-card">
+            <span class="prob-label">Speed</span>
+            <span class="prob-value" id="procTime">—</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Stats -->
+    <aside class="right-panel">
+
+      <!-- Model Stats -->
+      <div class="card stats-card" id="statsCard">
+        <div class="card-header">
+          <h2 class="card-title">MODEL PERFORMANCE</h2>
+          <button class="btn btn-ghost" id="trainBtn">
+            <span id="trainBtnText">TRAIN MODEL</span>
+          </button>
+        </div>
+
+        <div class="stats-not-trained" id="statsNotTrained">
+          <p>Model not yet trained. Click <strong>TRAIN MODEL</strong> to begin.</p>
+        </div>
+
+        <div class="stats-content hidden" id="statsContent">
+          <div class="metric-grid">
+            <div class="metric-card" id="metricAccuracy">
+              <div class="metric-value" id="valAccuracy">—</div>
+              <div class="metric-label">ACCURACY</div>
+              <div class="metric-bar"><div class="metric-bar-fill" id="barAccuracy"></div></div>
+            </div>
+            <div class="metric-card" id="metricPrecision">
+              <div class="metric-value" id="valPrecision">—</div>
+              <div class="metric-label">PRECISION</div>
+              <div class="metric-bar"><div class="metric-bar-fill" id="barPrecision"></div></div>
+            </div>
+            <div class="metric-card" id="metricRecall">
+              <div class="metric-value" id="valRecall">—</div>
+              <div class="metric-label">RECALL</div>
+              <div class="metric-bar"><div class="metric-bar-fill" id="barRecall"></div></div>
+            </div>
+            <div class="metric-card" id="metricF1">
+              <div class="metric-value" id="valF1">—</div>
+              <div class="metric-label">F1-SCORE</div>
+              <div class="metric-bar"><div class="metric-bar-fill" id="barF1"></div></div>
+            </div>
+          </div>
+
+          <div class="dataset-info" id="datasetInfo"></div>
+
+          <!-- Confusion Matrix -->
+          <div class="cm-section">
+            <h3 class="cm-title">CONFUSION MATRIX</h3>
+            <div class="cm-grid" id="cmGrid">
+              <div class="cm-header-blank"></div>
+              <div class="cm-header">Pred:<br/>Fake</div>
+              <div class="cm-header">Pred:<br/>Real</div>
+              <div class="cm-row-header">Act:<br/>Fake</div>
+              <div class="cm-cell cm-tn" id="cmTN">—</div>
+              <div class="cm-cell cm-fp" id="cmFP">—</div>
+              <div class="cm-row-header">Act:<br/>Real</div>
+              <div class="cm-cell cm-fn" id="cmFN">—</div>
+              <div class="cm-cell cm-tp" id="cmTP">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- ── LIVE NEWS FEED ── -->
+  <section class="live-news-section">
+    <div class="live-news-header">
+      <h2 class="section-title">
+        <span class="live-dot"></span> LIVE NEWS FEED
+      </h2>
+      <button class="btn btn-ghost" id="fetchLiveBtn">REFRESH</button>
+    </div>
+    <div class="live-news-grid" id="liveNewsGrid">
+      <p class="history-empty">Click REFRESH to fetch live news.</p>
+    </div>
+  </section>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
