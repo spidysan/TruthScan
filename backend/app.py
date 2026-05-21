@@ -208,3 +208,11 @@ def live_news():
         return LiveNewsResponse(articles=articles, count=len(articles))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch live news: {str(e)}")
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
+
+@app.get("/")
+async def root():
+    return FileResponse("frontend/index.html")
