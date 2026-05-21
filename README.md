@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # TruthScan AI — Fake News Detection System
 ## SVM + TF-IDF | Python + FastAPI + Vanilla JS
 
@@ -107,3 +108,7 @@ curl -X POST http://127.0.0.1:8000/predict \
 - `pandas` — data handling
 - `nltk` — stopwords, stemming
 - `joblib` — model persistence
+=======
+# TruthScan
+TruthScan -fake news detection system using SVM and TF-IDF with real-time news feed analysis, live article classification, performance insights, and a modern interactive web interface for identifying misleading news content.
+>>>>>>> d8f25a346f7ef53a8bc4af53186a41404f6ac125
