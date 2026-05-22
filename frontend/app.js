@@ -3,10 +3,7 @@
  * Connects to FastAPI backend for train/predict/stats and Live News.
  */
 
-const API_url = "";
-fetch("/predict")
-fetch("/train")
-fetch("/live-news")
+const API = "";
 
 // ─── DOM References ───────────────────────────────────────────
 const newsInput      = document.getElementById("newsInput");
